@@ -5,6 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Diesel Management Dashboard</title>
 
+<!-- <script>
+  function checkPasswordDisabled() {
+    const unlockSection = document.getElementById("unlockSection");
+    if (!unlockSection) {
+      console.log("unlockSection not found");
+      return;
+    }
+    const passwordInput = unlockSection.querySelector("#passwordInput");
+    if (!passwordInput) {
+      console.log("passwordInput not found");
+      return;
+    }
+
+    if (passwordInput.disabled) {
+      console.log("Password input is DISABLED!");
+    }
+  }
+
+  // Run once immediately:
+  checkPasswordDisabled();
+
+  // Then keep checking every second:
+  setInterval(checkPasswordDisabled, 1000);
+</script> -->
+
 <style>
   @import url('https://fonts.googleapis.com/css?family=Roboto:700');
 .dashboard-container {
@@ -139,7 +164,7 @@ header {
   /* Optional iframe styles */
   iframe {
     width: 100%;
-    height: 90vh;
+    height: 100vh;
     border: none;
   }
 
@@ -227,6 +252,82 @@ header h1 {
   position: relative; /* above bg divs */
   z-index: 1;
 }
+
+
+
+
+/* Toggle switch container */
+.toggle-switch {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 60px;
+  height: 34px;
+  z-index: 1000;
+  user-select: none;
+}
+
+/* Hide default checkbox */
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider background */
+.toggle-switch .slider {
+  position: relative;
+  cursor: pointer;
+  background-color: #333;
+  border-radius: 34px;
+  transition: background-color 0.4s;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* The sliding circle */
+.toggle-switch .slider::before {
+  content: "";
+  position: absolute;
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  top: 4px;
+  background: #ffdd00; /* sun color */
+  border-radius: 50%;
+  transition: 0.4s;
+  box-shadow: 0 0 8px #ffdd00;
+}
+
+/* Moon icon - when toggled off */
+.toggle-switch input:not(:checked) + .slider {
+  background-color: #222;
+}
+
+.toggle-switch input:not(:checked) + .slider::before {
+  background: #f0f0f0;
+  box-shadow: inset -4px -4px 0 0 #bbb, inset 4px 4px 0 0 #fff;
+  left: 30px;
+  top: 4px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  /* crescent shape */
+  clip-path: circle(50% at 40% 50%);
+}
+
+/* Slide the circle right on checked */
+.toggle-switch input:checked + .slider::before {
+  left: 4px;
+  background: #ffdd00;
+  box-shadow: 0 0 8px #ffdd00;
+}
+
+/* Add a subtle sun rays effect when ON */
+.toggle-switch input:checked + .slider {
+  background-color: #444;
+  box-shadow: 0 0 10px #ffdd00 inset;
+}
+
 </style>
 
 
@@ -244,9 +345,13 @@ header h1 {
 
 <!-- <a href="https://script.google.com/macros/s/AKfycby0pegI9k7YUtlJSGJNc-WJK1T17wfJ-Eb-tZC6G85N4qE3eRFfC0yNVAYBAohnlxfc/exec" target="_blank" rel="noopener noreferrer">Open Dashboard</a> -->
 
+<label class="toggle-switch">
+  <input type="checkbox" id="toggleDashboardCheckbox" checked>
+  <span class="slider"></span>
+</label>
 
   <iframe 
-    src="https://script.google.com/macros/s/AKfycbxzJXPdXSgN01qunWNBWePfAy_I-m_pZwbXrYC9Oplg34dwsannv18gFlJjXkQN8Pnn/exec"
+    src="https://script.google.com/macros/s/AKfycbxZXoQwgmUCa_FPjxvf_T0SNxT35_yUivY4PJ0o0FU8U632njdbxKapK-X4ZoTwd3M/exec"
     id="dashboardIframe">
   </iframe>
 
@@ -292,11 +397,11 @@ header h1 {
 
 
 
-<div class="dashboard-container">
+<div id="dashboard-container">
   <header>
       <div class="bg-left"></div>
   <div class="bg-right"></div>
-    <!-- <h7>Diesel Distributors</h7> -->
+    
   </header>
 
   <main class="info-box">
@@ -309,8 +414,6 @@ header h1 {
     </section>
 
 
-  <!-- <img src="images/Water Magic.gif" >
-   -->
   <div class="cropped-wrapper">
   <img 
     src="Water Magic.gif" 
@@ -327,8 +430,24 @@ header h1 {
         <div class="third">Great Things Are Coming</div>
       </div>
     </section>
+   
   </main>
+
+
 </div>
+<script>
+const toggleCheckbox = document.getElementById("toggleDashboardCheckbox");
+const dashboard = document.getElementById("dashboard-container");
+
+toggleCheckbox.addEventListener("change", () => {
+  if (toggleCheckbox.checked) {
+    dashboard.style.display = "block";
+  } else {
+    dashboard.style.display = "none";
+  }
+});
+
+</script>
 
 </body>
 </html>
