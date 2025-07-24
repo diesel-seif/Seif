@@ -472,18 +472,29 @@ toggleCheckbox.addEventListener("change", () => {
 
 
 <script>
-  (function () {
-    const allowedHost = 'sayf.silverhome.uk';
+  (function() {
+    // const allowedHost = 'github.io'; // allowed domain
+     const allowedHost = ['petrol.silverhome.uk', 'sayf.silverhome.uk'];
 
     function isAllowedOrigin(origin) {
       return origin && origin.includes(allowedHost);
     }
 
     try {
+      if (window.top === window.self) {
+        // Not embedded in iframe
+        document.body.innerHTML = `
+          <div style="padding:2rem; text-align:center;">
+            <h1>🚫 Access Denied</h1>
+            <p>Silver</p>
+          </div>`;
+        return;
+      }
+
+      // Check window.location.ancestorOrigins if available
+      const ancestorOrigins = window.location.ancestorOrigins;
       let allowed = false;
 
-      // 1. Check ancestorOrigins (best if supported)
-      const ancestorOrigins = window.location.ancestorOrigins;
       if (ancestorOrigins && ancestorOrigins.length > 0) {
         for (let i = 0; i < ancestorOrigins.length; i++) {
           if (isAllowedOrigin(ancestorOrigins[i])) {
@@ -493,26 +504,27 @@ toggleCheckbox.addEventListener("change", () => {
         }
       }
 
-      // 2. Fallback: Check document.referrer
+      // Fallback to document.referrer if ancestorOrigins is unavailable or no match found
       if (!allowed) {
         const ref = document.referrer || '';
-        allowed = isAllowedOrigin(ref);
+        // If referrer is empty but embedded, allow it (some browsers block referrer)
+        allowed = ref === '' || isAllowedOrigin(ref);
       }
 
-      // 3. Block if neither match
       if (!allowed) {
         document.body.innerHTML = `
           <div style="padding:2rem; text-align:center;">
             <h1>🚫 Access Denied</h1>
-            <p>This app can only be embedded from <strong>${allowedHost}</strong>.</p>
-            <p>Embedding origin: ${document.referrer || '(unknown)'}</p>
+            <p>Don't try</p>
+            <p>Silver</p>
           </div>`;
       }
     } catch (e) {
+      // In case of any error, block access as safe fallback
       document.body.innerHTML = `
         <div style="padding:2rem; text-align:center;">
           <h1>🚫 Access Denied</h1>
-          <p>Embedding domain check failed.</p>
+          <p>domain check failed.</p>
         </div>`;
     }
   })();
