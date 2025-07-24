@@ -468,5 +468,66 @@ toggleCheckbox.addEventListener("change", () => {
 </script>
 
 
+
+
+
+  <script>
+  (function () {
+    const allowedHost = 'sayf.silverhome.uk';
+
+    function isAllowedOrigin(origin) {
+      return origin && origin.includes(allowedHost);
+    }
+
+    try {
+      if (window.top === window.self) {
+        // Not embedded in iframe
+        document.body.innerHTML = `
+          <div style="padding:2rem; text-align:center;">
+            <h1>🚫 Access Denied</h1>
+            <p>This app must be embedded in an iframe.</p>
+            <p>Only from <strong>${allowedHost}</strong></p>
+          </div>`;
+        return;
+      }
+
+      // First, try `window.location.ancestorOrigins` (works in most modern browsers)
+      const ancestorOrigins = window.location.ancestorOrigins;
+      let allowed = false;
+
+      if (ancestorOrigins && ancestorOrigins.length > 0) {
+        for (let i = 0; i < ancestorOrigins.length; i++) {
+          if (isAllowedOrigin(ancestorOrigins[i])) {
+            allowed = true;
+            break;
+          }
+        }
+      }
+
+      // Fallback: check `document.referrer`
+      if (!allowed) {
+        const ref = document.referrer || '';
+        allowed = isAllowedOrigin(ref);
+      }
+
+      if (!allowed) {
+        document.body.innerHTML = `
+          <div style="padding:2rem; text-align:center;">
+            <h1>🚫 Access Denied</h1>
+            <p>This app can only be embedded from <strong>${allowedHost}</strong>.</p>
+            <p>Embedding origin: ${document.referrer || '(unknown)'}</p>
+          </div>`;
+      }
+    } catch (e) {
+      document.body.innerHTML = `
+        <div style="padding:2rem; text-align:center;">
+          <h1>🚫 Access Denied</h1>
+          <p>Embedding domain check failed.</p>
+        </div>`;
+    }
+  })();
+</script>
+
+  
 </body>
 </html>
