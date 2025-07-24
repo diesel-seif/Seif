@@ -374,33 +374,42 @@ header h1 {
   <div class="debug-log" id="debugLog"></div>
 
   <script>
-    const iframe = document.getElementById("dashboardIframe");
-    const fallback = document.getElementById("fallback");
-    const debugLog = document.getElementById("debugLog");
+const iframe = document.getElementById("dashboardIframe");
+const debugLog = document.getElementById("debugLog");
 
-    function logDebug(message) {
-      console.log(message);
-      debugLog.innerHTML += `<div>${message}</div>`;
-      debugLog.style.display = "block";
+// Your custom fallback div (add it in HTML below the iframe)
+const fallbackDiv = document.createElement("div");
+fallbackDiv.id = "fallbackMessage";
+fallbackDiv.innerHTML = "🚫 Dashboard could not load. Please check your connection or open in a new tab.";
+document.body.appendChild(fallbackDiv);
+
+// Check if iframe loads successfully
+iframe.addEventListener("load", () => {
+  console.log("✅ iframe loaded");
+  fallbackDiv.style.display = "none"; // hide fallback if loaded
+});
+
+// Check if iframe errors out
+iframe.addEventListener("error", () => {
+  console.log("❌ iframe failed to load");
+  fallbackDiv.style.display = "block";
+});
+
+// Extra timeout fallback in case of silent fail
+setTimeout(() => {
+  try {
+    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+    if (!iframeDocument || iframeDocument.body.innerHTML.trim() === "") {
+      console.log("⚠️ iframe empty after timeout");
+      fallbackDiv.style.display = "block";
     }
+  } catch (e) {
+    // Cross-origin error means iframe is inaccessible, treat as failure
+    console.log("⚠️ iframe cross-origin access blocked");
+    fallbackDiv.style.display = "block";
+  }
+}, 5000);
 
-    iframe.addEventListener("load", () => {
-    //   logDebug("✅ iframe loaded successfully.");
-    });
-
-    iframe.addEventListener("error", () => {
-      fallback.style.display = "block";
-      logDebug("❌ iframe failed to load.");
-    });
-
-    // Extra timeout check in case iframe silently fails
-    setTimeout(() => {
-      const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-      if (!iframeDocument || iframeDocument.body.innerHTML.trim() === "") {
-        fallback.style.display = "block";
-        logDebug("⚠️ iframe is empty after timeout. Possibly blocked or content not loading.");
-      }
-    }, 5000);
   </script>
 
 
