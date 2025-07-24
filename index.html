@@ -448,6 +448,35 @@ toggleCheckbox.addEventListener("change", () => {
 });
 
 </script>
+<iframe id="myIframe" src="https://script.google.com/macros/s/your-script/exec" style="width:100%;height:500px;"></iframe>
+<div id="fallbackMessage" style="display:none; color:red; text-align:center; padding:20px;">
+  🚫 Sorry, the dashboard is unavailable or refused to connect.
+</div>
+
+<script>
+  const iframe = document.getElementById('myIframe');
+  const fallback = document.getElementById('fallbackMessage');
+
+  iframe.addEventListener('error', () => {
+    fallback.style.display = 'block';
+    iframe.style.display = 'none';
+  });
+
+  // Optional: timeout fallback if iframe doesn't load content after some time
+  setTimeout(() => {
+    try {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      if (!iframeDoc || iframeDoc.body.innerHTML.trim() === '') {
+        fallback.style.display = 'block';
+        iframe.style.display = 'none';
+      }
+    } catch(e) {
+      // cross-origin iframe errors will trigger this
+      fallback.style.display = 'block';
+      iframe.style.display = 'none';
+    }
+  }, 5000);
+</script>
 
 </body>
 </html>
