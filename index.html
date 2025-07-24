@@ -523,8 +523,8 @@ toggleCheckbox.addEventListener("change", () => {
       // If direct access on other domains, block
       document.body.innerHTML = `
         <div style="padding:2rem; text-align:center;">
-          <h1>🚫 Access Denied</h1>
-          <p>This app must be accessed directly on silverhome.uk domain or embedded in an iframe from silverhome.uk domains.</p>
+          <h1>🚫 Access Denied 1</h1>
+
         </div>`;
       return;
     }
@@ -551,16 +551,15 @@ toggleCheckbox.addEventListener("change", () => {
     if (!allowed) {
       document.body.innerHTML = `
         <div style="padding:2rem; text-align:center;">
-          <h1>🚫 Access Denied</h1>
-          <p>This app can only be embedded from silverhome.uk domains.</p>
-          <p>Embedding origin: ${document.referrer || '(unknown)'}</p>
+          <h1>🚫 Access Denied 2</h1>
+
         </div>`;
     }
   } catch (e) {
     document.body.innerHTML = `
       <div style="padding:2rem; text-align:center;">
-        <h1>🚫 Access Denied</h1>
-        <p>Embedding domain check failed.</p>
+        <h1>🚫 Access Denied 3</h1>
+
       </div>`;
   }
 })();
