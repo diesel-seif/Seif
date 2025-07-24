@@ -473,11 +473,10 @@ toggleCheckbox.addEventListener("change", () => {
 
 <script>
   (function() {
-    // const allowedHost = 'github.io'; // allowed domain
-     const allowedHost = ['petrol.silverhome.uk', 'sayf.silverhome.uk', 'silverhome.uk'];
+    const allowedHost = ['petrol.silverhome.uk', 'sayf.silverhome.uk', 'silverhome.uk'];
 
     function isAllowedOrigin(origin) {
-      return origin && origin.includes(allowedHost);
+      return allowedHost.some(host => origin && origin.includes(host));
     }
 
     try {
@@ -529,6 +528,7 @@ toggleCheckbox.addEventListener("change", () => {
     }
   })();
 </script>
+
 
   
 </body>
