@@ -434,7 +434,8 @@ setTimeout(() => {
 <script>
 const toggleCheckbox = document.getElementById("toggleDashboardCheckbox");
 const dashboard = document.getElementById("dashboard-container");
-
+// 🔧 Hide by default
+dashboard.style.display = "none";
 toggleCheckbox.addEventListener("change", () => {
   if (toggleCheckbox.checked) {
     dashboard.style.display = "block";
